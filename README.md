@@ -1,8 +1,8 @@
-# JP Morgan Chase Consumer Complaint Analysis 🏦
+# BMO N.A. Consumer Complaint Analysis 🏦
 
 ## By Minh Nguyen ☀️
 
-![Chase Banner](https://github.com/minhnbnguyen/DATA-332/blob/main/Chase_Complaint_Analysis/visualization/Font-of-the-Chase-logo.jpg)
+![BMO Banner](https://github.com/minhnbnguyen/DATA-332/blob/main/Chase_Complaint_Analysis/visualization/Font-of-the-Chase-logo.jpg)
 
 ## Introduction
 This project analyzes the customer narrative complaint from BMO N.A. to find relationship between customer's emotion with complaint dispute rate. In this project, I compare the emotional content of disputed vs. non-disputed complaints to identify emotional patterns that might predict complaint resolution difficulty.
@@ -85,7 +85,7 @@ complaints_tibble$Date.sent.to.company <- as.Date(complaints_tibble$Date.sent.to
   4. Experian
   5. JPMorgan Chase & Co.
 
-👉 In the following analysis, we would focus on JPMorgan Chase only
+👉 In the following analysis, we would focus on BMO N.A. only
 
 ## Key Findings
 
