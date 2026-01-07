@@ -78,35 +78,36 @@ complaints_tibble$Date.sent.to.company <- as.Date(complaints_tibble$Date.sent.to
 ## Key Findings
 
 ### High-level view of the customer complaint
-![Word Cloud](https://github.com/minhnbnguyen/BMO/blob/main/pics/Rplot_wordcloud.png)
-- The most common problem are likely related to wrong information, lost, or failed issue
+![Word Cloud](https://github.com/minhnbnguyen/BMO/blob/main/pics/wordcloud.png)
+- The most common problem are likely related to fraudulent, frozen, and denied issue/problem
 
 ### Comparative Analysis using nrc sentiment
 ![Emotional content](https://github.com/minhnbnguyen/BMO/blob/main/pics/Rplot1.png)
 - Method: Compare the emotional content of disputed vs. non-disputed complaints
 - Goal: Identify emotional patterns that might predict complaint resolution difficulty
-- Result: Largest dispute ratio falls within negative and trust emotions
+- Result: Largest dispute ratio falls within positive and trust emotions
+--> Why positive?
 
   
 ## Perform statistical analysis to find correlation between emotion and dispute rate
 
-### Run logistic regression
+### Run logistic regression: None of the value is significant so maybe I will need to run a different statistical test
 ![Logistic](https://github.com/minhnbnguyen/BMO/blob/main/pics/Screen%20Shot%202026-01-06%20at%2020.28.09.png)
 
 Significant predictors are
-- anger (p = 0.002522): positive relationship 💢
-- joy (p = 0.01): negative relationship 😊
-- trust (p = 0.000456): positive relationship 🙏🏻
-- anticipation (p = 0.09): positive relationship 😌
+- anticipation (p = 0.9): negative relationship
+- fear (p = 0.8): negative relationship
+- anger (p = 0.7): positive relationship
+- surprise (p = 0.6): positive relationship
 
 
 ### Validate Model with Chi-Square Test
 ![Validate](https://github.com/minhnbnguyen/BMO/blob/main/pics/Screen%20Shot%202026-01-06%20at%2020.28.51.png)
 
 Significant predictors are
-- Anger (p = 9.61e)
-- Trust (p = 3.79e)
-- Sadness (p = 0.01)
+- Joy
+- Anticipation
+- Anger (p = 
 
 - Joy is significant in the coefficient test but not in the sequential test, suggesting it may share explanatory power with variables added earlier
 - Sadness is significant in the sequential test but not in the coefficient test
