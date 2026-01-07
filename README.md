@@ -75,32 +75,14 @@ complaints_tibble$Date.received <- as.Date(complaints_tibble$Date.receive, forma
 complaints_tibble$Date.sent.to.company <- as.Date(complaints_tibble$Date.sent.to.company, format = '%m/%d/%Y')
 ```
 
-## Data Summary
-- Our dataset spans nearly two years (Mar 2015 - Sep 2016) with 670,598 complaints
-- These complaints come from 3,933 us banks 🏦
-- The top 5 companies with most complaints are:
-  1. Bank of America
-  2. Wels Fargo & Company
-  3. Equifax
-  4. Experian
-  5. JPMorgan Chase & Co.
-
-👉 In the following analysis, we would focus on BMO N.A. only
-
 ## Key Findings
 
 ### High-level view of the customer complaint
-![Word Cloud](https://github.com/minhnbnguyen/DATA-332/blob/main/Chase_Complaint_Analysis/visualization/wordcloud.png)
+![Word Cloud](https://github.com/minhnbnguyen/BMO/blob/main/pics/Rplot_wordcloud.png)
 - The most common problem are likely related to wrong information, lost, or failed issue
 
-### Net sentiment emotions related to each product
-![Net Sentiment](https://github.com/minhnbnguyen/DATA-332/blob/main/Chase_Complaint_Analysis/visualization/netsentiment.png)
-- Net sentiment is the net emotion from each complaint (i.e net sentiment = positive - negative)
-- We can see the largest emotion gap is in other financial services product, following by credit card and bank account or services, debt collection is also observed with large gap
-- Since other financial services product is quite general, Chase should conduct more analysis on the credit card, bank account and debt collection product to identify the root cause that cause negative complaints.
-
 ### Comparative Analysis using nrc sentiment
-![Emotional content](https://github.com/minhnbnguyen/DATA-332/blob/main/Chase_Complaint_Analysis/visualization/disputevsnondispute_emotion.png)
+![Emotional content](https://github.com/minhnbnguyen/BMO/blob/main/pics/Rplot1.png)
 - Method: Compare the emotional content of disputed vs. non-disputed complaints
 - Goal: Identify emotional patterns that might predict complaint resolution difficulty
 - Result: Largest dispute ratio falls within negative and trust emotions
@@ -109,7 +91,7 @@ complaints_tibble$Date.sent.to.company <- as.Date(complaints_tibble$Date.sent.to
 ## Perform statistical analysis to find correlation between emotion and dispute rate
 
 ### Run logistic regression
-![Logistic](https://github.com/minhnbnguyen/DATA-332/blob/main/Chase_Complaint_Analysis/visualization/Regression.png)
+![Logistic](https://github.com/minhnbnguyen/BMO/blob/main/pics/Screen%20Shot%202026-01-06%20at%2020.28.09.png)
 
 Significant predictors are
 - anger (p = 0.002522): positive relationship 💢
@@ -119,7 +101,7 @@ Significant predictors are
 
 
 ### Validate Model with Chi-Square Test
-![Validate](https://github.com/minhnbnguyen/DATA-332/blob/main/Chase_Complaint_Analysis/visualization/ChiSquared.png)
+![Validate](https://github.com/minhnbnguyen/BMO/blob/main/pics/Screen%20Shot%202026-01-06%20at%2020.28.51.png)
 
 Significant predictors are
 - Anger (p = 9.61e)
