@@ -1,6 +1,6 @@
 # BMO N.A. Consumer Complaint Analysis 🏦
 
-## By Minh Nguyen ☀️
+## By Robin Nguyen ☀️
 
 ![BMO Banner](https://github.com/minhnbnguyen/BMO/blob/main/pics/1636124069353.jpeg)
 
