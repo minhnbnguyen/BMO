@@ -2,7 +2,7 @@
 
 ## By Minh Nguyen ☀️
 
-![BMO Banner](https://github.com/minhnbnguyen/DATA-332/blob/main/Chase_Complaint_Analysis/visualization/Font-of-the-Chase-logo.jpg)
+![BMO Banner](https://github.com/minhnbnguyen/BMO/blob/main/pics/1636124069353.jpeg)
 
 ## Introduction
 This project analyzes the customer narrative complaint from BMO N.A. to find relationship between customer's emotion with complaint dispute rate. In this project, I compare the emotional content of disputed vs. non-disputed complaints to identify emotional patterns that might predict complaint resolution difficulty.
