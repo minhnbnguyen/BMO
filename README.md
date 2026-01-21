@@ -5,7 +5,9 @@
 ![BMO Banner](https://github.com/minhnbnguyen/BMO/blob/main/pics/1636124069353.jpeg)
 
 ## Introduction
-This project analyzes the customer narrative complaint from BMO N.A. to find relationship between customer's emotion with complaint dispute rate. In this project, I compare the emotional content of disputed vs. non-disputed complaints to identify emotional patterns that might predict complaint resolution difficulty.
+This project analyzes the customer narrative complaint from BMO N.A.
+
+Data is downloaded from the [Consumer Financial Protection Bureau](https://www.consumerfinance.gov/data-research/consumer-complaints/#get-the-data).
 
 ## Data Dictionary 📖
 Our dataset includes the following columns:
@@ -81,36 +83,13 @@ complaints_tibble$Date.sent.to.company <- as.Date(complaints_tibble$Date.sent.to
 ![Word Cloud](https://github.com/minhnbnguyen/BMO/blob/main/pics/wordcloud.png)
 - Among 6,000 complaints, the most common problem are likely related to fraudulent, frozen, and denied issue/problem
 
+### Year-Over-Year trend
+![Line Graph](https://github.com/minhnbnguyen/BMO/blob/main/pics/Rplot.png)
+- Average complaints per quarter: 3,027 
+- Peak quarter: 2023 Q4 with 11,929 complaints
+
 ### Comparative Analysis using nrc sentiment
 ![Emotional content](https://github.com/minhnbnguyen/BMO/blob/main/pics/Rplot1.png)
 - Method: Compare the emotional content of disputed vs. non-disputed complaints
 - Goal: Identify emotional patterns that might predict complaint resolution difficulty
 - Result: Largest dispute ratio falls within positive and trust emotions
-  
-## Perform statistical analysis to find correlation between emotion and dispute rate
-
-### Run logistic regression: None of the value is significant so maybe I will need to run a different statistical test
-![Logistic](https://github.com/minhnbnguyen/BMO/blob/main/pics/Screen%20Shot%202026-01-06%20at%2020.28.09.png)
-
-Significant predictors are
-- anticipation (p = 0.9): negative relationship
-- fear (p = 0.8): negative relationship
-- anger (p = 0.7): positive relationship
-- surprise (p = 0.6): positive relationship
-
-
-### Validate Model with Chi-Square Test
-![Validate](https://github.com/minhnbnguyen/BMO/blob/main/pics/Screen%20Shot%202026-01-06%20at%2020.28.51.png)
-
-Significant predictors are
-- Joy
-- Anticipation
-- Anger (p = 
-
-- Joy is significant in the coefficient test but not in the sequential test, suggesting it may share explanatory power with variables added earlier
-- Sadness is significant in the sequential test but not in the coefficient test
-
-## Final Suggestions
-- Focus on anger and trust as your primary findings since they are significant in both tests
-- Acknowledge joy as potentially important since it's significant when controlling for all variables
-- Consider whether to include sadness based on your research question and theoretical framework -> work backwards
