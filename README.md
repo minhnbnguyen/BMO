@@ -79,15 +79,13 @@ complaints_tibble$Date.sent.to.company <- as.Date(complaints_tibble$Date.sent.to
 
 ### High-level view of the customer complaint
 ![Word Cloud](https://github.com/minhnbnguyen/BMO/blob/main/pics/wordcloud.png)
-- The most common problem are likely related to fraudulent, frozen, and denied issue/problem
+- Among 6,000 complaints, the most common problem are likely related to fraudulent, frozen, and denied issue/problem
 
 ### Comparative Analysis using nrc sentiment
 ![Emotional content](https://github.com/minhnbnguyen/BMO/blob/main/pics/Rplot1.png)
 - Method: Compare the emotional content of disputed vs. non-disputed complaints
 - Goal: Identify emotional patterns that might predict complaint resolution difficulty
 - Result: Largest dispute ratio falls within positive and trust emotions
---> Why positive?
-
   
 ## Perform statistical analysis to find correlation between emotion and dispute rate
 
