@@ -5,13 +5,14 @@ library(stringr)
 library(ggplot2)
 library(tidyr)
 library(readr)
+library(lubridate)
 
 # set up environment
 rm(list = ls())
-setwd('~/Documents/r_projects/text_analysis/data')
+setwd('~/Documents/BMO')
 
 # read file into tibble
-complaints_tibble <- read.csv('Consumer_Complaints.csv')
+complaints_tibble <- read.csv('complaints-2026-01-05_16_58.csv')
 
 # I. data cleaning
 # a. convert data type
@@ -49,12 +50,6 @@ complaints_tibble <- complaints_tibble %>%
 unique_counts <- sapply(complaints_tibble, function(x) length(unique(x)))
 print(unique_counts)
 
-# Find which company has the most records
-top_5_companies <- complaints_tibble %>%
-  count(Company, sort = TRUE) %>%  # Count records by country and sort
-  head(5)
-
-
 # III. Sentiment Analysis on BMO's consumer complaint narrative
 # a. High level overview
 # Use word cloud and sentiment bing
@@ -70,7 +65,6 @@ bing_negative <- get_sentiments("bing") %>%
 
 # count negative word to prep for word cloud
 negative_word_count <- complaints_tibble %>%
-  filter(Company == "BMO Harris") %>%
   inner_join(bing_negative) %>%
   count(word, sort = TRUE)
 
@@ -80,23 +74,8 @@ library(wordcloud2)
 wordcloud2(data = negative_word_count,
            size = 1.5,
            color = "random-dark",
-           backgroundColor = "white",
+           backgroundColor = "black",
            shape = "circle")
-
- # Create chart to analyze emotion based on each product
-complaint_product_sentiment <- complaints_tibble %>%
-  filter(Company == "BMO Harris") %>%
-  inner_join(get_sentiments("bing"),relationship = "many-to-many") %>%
-  count(Product, sentiment) %>%
-  pivot_wider(names_from = sentiment, values_from = n, values_fill = 0) %>% 
-  mutate(sentiment = positive - negative)
-
-ggplot(complaint_product_sentiment, aes(x = Product, y = sentiment, fill = Product)) +
-  geom_col() +
-  labs(title = "Net Sentiment by Product",
-       x = "Product",
-       y = "Net Sentiment (Positive - Negative)") +
-  theme_minimal()
 
 # Comparative Analysis using nrc sentiment
 # Method: Compare the emotional content of disputed vs. non-disputed complaints
@@ -106,7 +85,6 @@ nrc <- get_sentiments("nrc")
 
 # join with nrc
 complaints_tibble <- complaints_tibble %>%
-  filter(Company == "BMO Harris") %>%
   anti_join(stop_words) %>% # remove common stop word
   inner_join(nrc, relationship = "many-to-many")
 
@@ -139,31 +117,67 @@ ggplot(emotion_by_dispute, aes(x = sentiment, y = avg_proportion, fill = Consume
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-# Statistical analysis - logistic regression
-# Reshape data for logistic regression
-complaints_tibble <- complaints_tibble %>%
-  mutate(binary_dispute = case_when(
-    Consumer.disputed. == "Yes" ~ 1,
-    Consumer.disputed. == "No" ~ 0,
-    TRUE ~ NA_real_
-  ))
+# Line graph year over year trend
+# 1. Prepare the data - extract year and quarter from Date.received
+complaints_over_time <- complaints_tibble %>%
+  # Convert Date.received to Date format
+  mutate(
+    date_received = as.Date(Date.received, format = "%m/%d/%Y"),
+    # Extract year and quarter
+    year = year(date_received),
+    quarter = quarter(date_received),
+    # Create year-quarter label
+    year_quarter = paste0(year, " Q", quarter)
+  ) %>%
+  # Remove rows with missing dates
+  filter(!is.na(date_received))
 
-emotion_wide <- complaints_tibble %>%
-  count(Complaint.ID,binary_dispute, sentiment) %>%
-  pivot_wider(
-    id_cols = c(Complaint.ID, binary_dispute),
-    names_from = sentiment,
-    values_from = n,
-    values_fill = 0
+# 2. Count complaints by year-quarter
+complaints_summary <- complaints_over_time %>%
+  group_by(year, quarter, year_quarter) %>%
+  summarise(
+    complaint_count = n(),
+    .groups = "drop"
+  ) %>%
+  # Create a proper date for plotting (first day of each quarter)
+  mutate(
+    quarter_date = ymd(paste(year, (quarter - 1) * 3 + 1, "01", sep = "-"))
+  ) %>%
+  arrange(quarter_date)
+
+# 3. Create the line graph
+# Alternative: Show fewer x-axis labels for better readability
+ggplot(complaints_summary, aes(x = quarter_date, y = complaint_count)) +
+  geom_line(color = "#2E86AB", size = 1.2) +
+  geom_point(color = "#2E86AB", size = 3) +
+  labs(
+    title = "Number of Complaints Over Time",
+    subtitle = "Quarterly trend of consumer complaints",
+    x = "Year-Quarter",
+    y = "Number of Complaints"
+  ) +
+  scale_x_date(
+    date_breaks = "1 year",  # Show every year instead of every quarter
+    date_labels = "%Y"
+  ) +
+  scale_y_continuous(
+    labels = scales::comma
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold"),
+    plot.subtitle = element_text(size = 12, color = "gray40"),
+    axis.text.x = element_text(size = 10),
+    axis.text.y = element_text(size = 10),
+    axis.title = element_text(size = 12, face = "bold"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_line(color = "gray90"),
+    panel.grid.major.y = element_line(color = "gray90")
   )
 
-# Run logistic regression
-dispute_model <- glm(binary_dispute ~ anger + fear + joy + sadness + trust + surprise + anticipation + disgust,
-                     data = emotion_wide, family = "binomial")
-
-# View model summary
-summary(dispute_model)
-
-# validate model with Chi-Squared Test 
-chisq_test <- anova(dispute_model, test = "Chisq")
-print(chisq_test)
+# 4. Summary statistics
+cat("Average complaints per quarter:", 
+    round(mean(complaints_summary$complaint_count), 0), "\n")
+cat("Peak quarter:", 
+    complaints_summary$year_quarter[which.max(complaints_summary$complaint_count)],
+    "with", max(complaints_summary$complaint_count), "complaints\n")
